@@ -10,7 +10,7 @@ public class Teacher {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // nama guru
+    // namaA   guru
     private String name;
 
     // mata pelajaran
