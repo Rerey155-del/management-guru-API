@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll() // Izinkan endpoint login
-                        .requestMatchers("/api/teachers/**").authenticated()
+                        .requestMatchers("/api/teachers/**").authenticated() // izinkan endpoint nya untuk dashboard
                         .anyRequest().permitAll())
                 .httpBasic(basic -> basic
                         .authenticationEntryPoint((request, response, authException) -> {

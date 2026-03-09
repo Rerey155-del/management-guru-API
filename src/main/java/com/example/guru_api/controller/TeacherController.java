@@ -13,7 +13,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/teachers")
-@CrossOrigin(origins="*")
 public class TeacherController {
 
     private final TeacherService teacherService;
@@ -31,8 +30,7 @@ public class TeacherController {
         return new ApiResponse<>(
                 true,
                 "Data berhasil didapatkan",
-                teachers
-        );
+                teachers);
     }
 
     // CREATE
@@ -44,23 +42,20 @@ public class TeacherController {
         return new ApiResponse<>(
                 true,
                 "Data guru berhasil dibuat",
-                teacher
-        );
+                teacher);
     }
 
     // UPDATE
     @PutMapping("/{id}")
     public ApiResponse<Teacher> updateTeacher(
             @PathVariable Long id,
-            @Valid @RequestBody TeacherDto dto
-    ) {
+            @Valid @RequestBody TeacherDto dto) {
 
         Teacher teacher = teacherService.updateTeacher(id, dto);
 
         return new ApiResponse<>(
                 true,
                 "Data guru berhasil diperbarui",
-                teacher
-        );
+                teacher);
     }
 }
