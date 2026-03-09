@@ -40,5 +40,6 @@ public class SecurityConfig {
                 }); // menggunakan Basic Authentication
 
         return http.build();
+
     }
 }
