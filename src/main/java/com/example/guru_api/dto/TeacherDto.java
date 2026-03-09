@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 public class TeacherDto {
     @NotBlank(message = "Nama guru wajib diisi")
     private String name;
+    
     @NotBlank(message = "Mata Pelajaran wajib diisi")
     private String subject;
 

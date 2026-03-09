@@ -3,8 +3,10 @@ package com.example.guru_api.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -12,13 +14,13 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-    // Menggunakan BCrypt untuk enkripsi password
+    // Encoder password BCrypt
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // Bean untuk mengaktifkan AuthenticationManager
+    // Bean AuthenticationManager untuk AuthController
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
@@ -28,23 +30,16 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                // .cors(cors -> {})
-                .cors(cors -> {
-                })
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // Izinkan endpoint login
-                        .requestMatchers("/api/teachers/**").authenticated() // izinkan endpoint nya untuk dashboard
-                        .anyRequest().permitAll())
-                .httpBasic(basic -> basic
-                        .authenticationEntryPoint((request, response, authException) -> {
-                            // Kirim status 401 tanpa header WWW-Authenticate agar popup browser tidak
-                            // muncul
-                            response.sendError(jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED,
-                                    "Unauthorized");
-                        }));
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+            .cors(Customizer.withDefaults()) // Menggunakan CorsConfig.java
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+                    .requestMatchers("/api/auth/**").permitAll() // Izinkan endpoint login
+                    .requestMatchers("/api/teachers/**").authenticated() // Proteksi data guru
+                    .anyRequest().permitAll()
+            )
+            .httpBasic(Customizer.withDefaults()); // Basic Auth (Browser Popup)
 
         return http.build();
-
-    }
+    }   
 }
