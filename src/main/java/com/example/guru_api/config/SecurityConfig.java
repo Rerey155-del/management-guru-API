@@ -36,8 +36,13 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll() // Izinkan endpoint login
                         .requestMatchers("/api/teachers/**").authenticated()
                         .anyRequest().permitAll())
-                .httpBasic(basic -> {
-                }); // menggunakan Basic Authentication
+                .httpBasic(basic -> basic
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            // Kirim status 401 tanpa header WWW-Authenticate agar popup browser tidak
+                            // muncul
+                            response.sendError(jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED,
+                                    "Unauthorized");
+                        }));
 
         return http.build();
 
