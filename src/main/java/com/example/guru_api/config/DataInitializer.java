@@ -16,9 +16,16 @@ public class DataInitializer {
             if (userRepository.findByUsername("admin").isEmpty()) {
                 User admin = new User();
                 admin.setUsername("admin");
-                admin.setPassword(passwordEncoder.encode("admin123"));
+                admin.setPassword(passwordEncoder.encode("123456"));
                 userRepository.save(admin);
                 System.out.println(">>> Default Admin User created: username 'admin' password 'admin123'");
+            }
+            if (userRepository.findByUsername("oke").isEmpty()) {
+                User oke = new User();
+                oke.setUsername("oke");
+                oke.setPassword(passwordEncoder.encode("123456"));
+                userRepository.save(oke);
+                System.out.println(">>> Default Admin User created: username 'oke' password '123456'");
             }
         };
     }
